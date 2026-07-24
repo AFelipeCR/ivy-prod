@@ -22,7 +22,7 @@ interface ExtensionRegistry{
 
 interface ExtensionTable {
   name: string, 
-  functionNames: FunctionTable[], 
+  functions: FunctionTable[], 
   endpoint: string, 
   events:string[];
   serviceInputs: InputsField[];
@@ -68,7 +68,7 @@ export class ExtensionRegistryService implements OnApplicationBootstrap {
 
         this.registry.push({ name, functions, serviceClass, serviceInputs });
 
-        await this.saveToDatabase({name, functionNames: functions, endpoint, events, serviceInputs});
+        await this.saveToDatabase({name, functions, endpoint, events, serviceInputs});
 
         Logger.log(`Extension "${name}" registered.`, "ExtensionRegistry")
       }
@@ -87,11 +87,11 @@ export class ExtensionRegistryService implements OnApplicationBootstrap {
     }))
   }
 
-  private async saveToDatabase({name, functionNames, endpoint, events, serviceInputs}: ExtensionTable) {
+  private async saveToDatabase({name, functions, endpoint, events, serviceInputs}: ExtensionTable) {
     let extension = await this.extensionRepository.findOneBy({ name });
     if (!extension) extension = await this.extensionRepository.save({ name, endpoint, events, inputs: serviceInputs });
 
-    for (const f of functionNames) {
+    for (const f of functions) {
       let extFunc = await this.functionRepository.findOne({
         where: { command: f.command, extension: { id: extension.id } }
       });

@@ -7,14 +7,18 @@ import { ActionFunction } from './entities/action-function.entity';
 import { ActionService } from './action.service';
 import { ActionController } from './action.controller';
 import { Extension } from '../extension/entities/extension.entity';
+import { Group } from '../group/entities/group.entity';
+import { ActionGroup } from './entities/action-group.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      Action,
       Extension,
-      Action, 
-      ExtFunction,
       ActionFunction,
+      ExtFunction,
+      ActionGroup,
+      Group,
     ]),
     HttpModule
   ],

@@ -1,5 +1,5 @@
 import { ExtFunction } from "src/modules/extension/entities/ext-function.entity";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, ManyToOne, JoinColumn, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { Action } from "./action.entity";
 
 @Entity({ name: "action_functions" })
