@@ -24,7 +24,14 @@ export default function ActionsListPanel ({sessionId, sessionName}: ActionListPa
             return;
         }
         console.log(as)
-        setActions(as as ActionModel[]);
+        let actionsRes = as as ActionModel[]
+
+        actionsRes = actionsRes.map(a => {
+            a.groups = a.groups.map(ag => ag.group)
+            return a;
+        })
+
+        setActions(actionsRes);
     }
 
     const closeModal = () => {
@@ -56,7 +63,7 @@ export default function ActionsListPanel ({sessionId, sessionName}: ActionListPa
                     <div>
                         <div className="has-text-info">{a.extension.name}</div>
                         <div className="has-text-success">{a.command}</div>
-                        <div>{a.selectedGroups}</div>
+                        <div>{a.groups.map(g => g.name).join(", ")}</div>
                     </div>
                     <div className="is-flex is-right">
                         <Link className="button is-info" relative="path" to={`../action/${a.id}`}>Manage</Link>

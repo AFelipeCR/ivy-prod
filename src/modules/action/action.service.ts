@@ -8,6 +8,8 @@ import { ExtFunction } from '../extension/entities/ext-function.entity';
 import { ActionFunction } from './entities/action-function.entity';
 import { Extension } from '../extension/entities/extension.entity';
 import { ValuesField } from '@ivy-eco/sdk/common/interfaces/fields.interface';
+import { Group } from '../group/entities/group.entity';
+import { ActionGroup } from './entities/action-group.entity';
 
 @Injectable()
 export class ActionService {
@@ -22,6 +24,10 @@ export class ActionService {
         private functionR: Repository<ExtFunction>,
         @InjectRepository(ActionFunction)
         private actionFuncR: Repository<ActionFunction>,
+        @InjectRepository(Group)
+        private groupR: Repository<Group>,
+        @InjectRepository(ActionGroup)
+        private actionGroupR: Repository<ActionGroup>,
         private config: ConfigService,
     ) {
         this.headers = {
@@ -36,19 +42,39 @@ export class ActionService {
         if(!extension)
             return { success: false };
 
+        for (const group of data.groups) {
+            let groupE = await this.groupR.findOne({
+                where: { id: group.id }
+            });
+
+            if (!groupE) {
+                await this.groupR.save({
+                    id: group.id,
+                    name: group.name
+                });
+            }
+
+        }
+
         const action = await this.actionR.save({ 
             command: data.command, 
             session: { id: sessionId },
             extension: { id: extension.id },
-            selectedGroups: data.groups,
             values: data.values
         });
 
-        for (const item of data.functions) {
+        for (const group of data.groups) {
+            await this.actionGroupR.save({
+                action: { id: action.id },
+                group: { id: group.id },
+            });
+        }
+
+        for (const extFunction of data.functions) {
             const extFunc = await this.functionR.findOne({
                 where: {
-                    command: item.function,
-                    extension: { name: item.extension }
+                    command: extFunction.function,
+                    extension: { name: extFunction.extension }
                 }
             });
 
@@ -56,8 +82,8 @@ export class ActionService {
                 await this.actionFuncR.save({
                     action: { id: action.id },
                     function: { id: extFunc.id },
-                    values: item.inputs,
-                    command: item.command
+                    values: extFunction.inputs,
+                    command: extFunction.command
                 });
             }
         }
@@ -68,7 +94,7 @@ export class ActionService {
     getBySessionId(sessionId: string){
         const actions = this.actionR.find({
             where: { session: { id: sessionId } },
-            relations: { extension: true }
+            relations: { extension: true, groups: { group: true } }
         });
 
         return actions;
@@ -82,10 +108,15 @@ interface ActionFuncReq {
     command: string;
 }
 
+export interface GroupReq {
+    id: string;
+    name: string;
+}
+
 export interface ActionReq {
     command: string;
     functions: ActionFuncReq[];
     extension: string;
-    groups: string[];
+    groups: GroupReq[];
     values: ValuesField[];
 }

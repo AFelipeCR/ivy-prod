@@ -3,6 +3,7 @@ import { ActionFunction } from "./action-function.entity";
 import { Session } from "src/modules/session/entities/session.entity";
 import { Extension } from "src/modules/extension/entities/extension.entity";
 import { ValuesField } from "@ivy-eco/sdk/common/interfaces/fields.interface";
+import { ActionGroup } from "./action-group.entity";
 
 @Entity({ name: "actions" })
 export class Action {
@@ -11,9 +12,6 @@ export class Action {
 
     @Column({ type: "text"})
     command: string;
-
-    @Column("simple-json", { name: "selected_groups" })
-    selectedGroups: string[];
 
     @Column("simple-json", { name: "values" })
     values: ValuesField[];
@@ -26,6 +24,9 @@ export class Action {
     @JoinColumn({ name: "extension_id" })
     extension: Extension;
 
-    @OneToMany(() => ActionFunction, (extFun) => extFun.action)
+    @OneToMany(() => ActionFunction, (actFun) => actFun.action)
     functions: ActionFunction[]
+
+    @OneToMany(() => ActionGroup, (actGroup) => actGroup.action)
+    groups: ActionGroup[]
 }

@@ -20,8 +20,11 @@ import { Action } from './modules/action/entities/action.entity';
 import { ActionFunction } from './modules/action/entities/action-function.entity';
 
 import { GroupModule } from './modules/group/group.module';
+import { Group } from './modules/group/entities/group.entity';
 
 import { extensionsList } from './extensions.list';
+import { ActionGroup } from './modules/action/entities/action-group.entity';
+
 
 @Module({
   imports: [
@@ -47,8 +50,9 @@ import { extensionsList } from './extensions.list';
         password: configService.getOrThrow("DATABASE_PASSWORD"),
         entities: [
           Session,
-          Action, ActionFunction,
-          Extension, ExtFunction
+          Action, ActionFunction, ActionGroup,
+          Extension, ExtFunction,
+          Group
         ],
         synchronize: true,
       })

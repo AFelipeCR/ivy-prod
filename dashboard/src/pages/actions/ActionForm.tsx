@@ -25,7 +25,7 @@ export default function ActionForm({ sessionId }: { sessionId: string }) {
 
         const action = {
             command: data.get("command"),
-            groups: selectedGroups,
+            groups: groups.filter(g => selectedGroups.includes(g.id)),
             extension: selectedExtension.name,
             values: selectedExtension.inputs.map(i => ({
                 name: i.name,
@@ -40,7 +40,6 @@ export default function ActionForm({ sessionId }: { sessionId: string }) {
 
         } as any as RegisterActionBody;
         console.log("action", action)
-
         const res = await api.actions.register(sessionId, action);
 
         if (res.success) {

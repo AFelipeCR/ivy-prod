@@ -24,7 +24,7 @@ export abstract class AExtensionService {
         const actions = await this.dataSource.getRepository<Action>("actions").find({
             where: {
                 extension: { id: extension.id },
-                selectedGroups: Like(`%"${data.chatId}"%`),
+                groups: { group: { id: data.chatId } },
                 command: commands[0]
             }
         });

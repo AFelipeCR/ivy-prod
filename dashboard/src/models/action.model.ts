@@ -21,7 +21,7 @@ export interface ActionModel {
   id: number;
   command: string;
   events: SubscribableEvent [];
-  selectedGroups: string[];
+  groups: { id: number, group: { id: string, name: string } }[] | { id: string, name: string } []
   extension: ExtensionModel;
   values: string[]
 }
