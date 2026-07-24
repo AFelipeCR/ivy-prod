@@ -5,12 +5,10 @@ import { ExtensionController } from './extension.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Extension } from './entities/extension.entity';
 import { ExtFunction } from './entities/ext-function.entity';
-import { ExtensionExecutorService } from './extension-executor.service';
 
 @Module({
     providers: [
-        ExtensionRegistryService,
-        ExtensionExecutorService,
+        ExtensionRegistryService
     ],
     imports: [TypeOrmModule.forFeature([Extension, ExtFunction]),],
     exports: [ExtensionRegistryService]

@@ -43,13 +43,13 @@ export abstract class AExtensionService {
                 });
 
                 if (actionFunctions) {
-                    founded = true;
+                    founded = actionFunctions.length > 0;
                     action.functions = actionFunctions;
                 }
             }
 
             if (!founded) {
-                await this.commandNotFound(body, commands[1]);
+                await this.multiWord(body, commands[1]);
             }
         } else {
             for (const action of actions) {
@@ -91,4 +91,8 @@ export abstract class AExtensionService {
     abstract get events():SubscribableEvent[];
 
     abstract commandNotFound(body, command: string):Promise<void>;
+
+    multiWord(body: ReceivedMessageEvent, command: string) {
+        return this.commandNotFound(body, command);
+    };
 }

@@ -5,12 +5,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const port = process.env.PORT ?? 3000;
+  const prefix = process.env.PREFIX ?? "api";
 
-  app.setGlobalPrefix("ivy");
+  app.setGlobalPrefix(prefix);
 
   await app.listen(process.env.PORT ?? 3000, () => {
-    console.log(`Listening on http://localhost:${port}`);
-    console.log(`Listening on ${process.env.SERVER_IP}:${port}`);
+    console.log(`Listening on http://localhost:${port}/${prefix}`);
+    console.log(`Listening on ${process.env.SERVER_IP}:${port}/${prefix}`);
   });
 
 }

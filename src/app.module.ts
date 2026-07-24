@@ -58,7 +58,7 @@ import { extensionsList } from './extensions.list';
     GroupModule,
     ExtensionsModule.forRoot(extensionsList),
     ServeStaticModule.forRoot({
-      rootPath: path.join(__dirname, '..', 'dashboard', 'dist'),
+      rootPath: path.join(__dirname, '..', '..', 'dashboard', 'dist'),
     })
   ],
 })
