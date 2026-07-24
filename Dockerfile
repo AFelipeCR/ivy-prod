@@ -4,20 +4,22 @@ ARG NPM_TOKEN
 
 WORKDIR /app
 
+RUN echo "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}" > .npmrc && \
+    echo "@ivy-eco:registry=https://npm.pkg.github.com/" >> .npmrc
+
 COPY package*.json ./
 COPY sdk/javascript ./sdk/javascript
 
 RUN cd sdk/javascript && npm install && npm run build
 
-RUN echo "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}" > .npmrc && \
-    echo "@ivy-eco:registry=https://npm.pkg.github.com/" >> .npmrc && \
-    npm install && \
-    rm -f .npmrc
+RUN npm install
 
 COPY . .
 RUN npm run build
 
 RUN cd dashboard && npm install && npm run build
+
+RUN rm -f .npmrc
 
 FROM node:22-alpine
 
