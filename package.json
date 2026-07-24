@@ -23,7 +23,6 @@
     "sdk/javascript"
   ],
   "dependencies": {
-    "@ivy-eco/info": "^0.1.1",
     "@ivy-eco/sdk": "*",
     "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.0.1",
